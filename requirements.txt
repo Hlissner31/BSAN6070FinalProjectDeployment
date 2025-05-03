@@ -1,0 +1,8 @@
+python==3.10.12
+streamlit==1.33.0
+xgboost==3.0.0
+scikit-learn==1.4.2
+category-encoders==2.6.3
+joblib==1.4.2
+pandas==2.2.2
+numpy==1.26.4
