@@ -33,6 +33,7 @@ with st.form("income_form"):
         age = st.number_input("Age", 0, 120, 30)
         sex = st.selectbox("Sex", [1, 2])
         statefip = st.number_input("State FIPS", 1, 99, 6)
+        region = st.number_input("Region", 1, 9, 1)
         marital_status = st.number_input("Marital Status (MARST)", 1, 9, 1)
         nchil = st.number_input("Number of Children", 0, 20, 0)
         uhrswork = st.number_input("Hours Worked per Week", 0, 100, 40)
@@ -50,6 +51,8 @@ with st.form("income_form"):
         race = st.number_input("Race", 1, 9, 1)
         bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
         ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
+        language = st.number_input("Language", 0, 999, 100)
+        perwt = st.number_input("Person Weight", 1, 999, 100)
         
         # Replace occsoc and ind with dropdowns based on the Excel file
         industry_options = industry_df['Industry Name'].tolist()
@@ -72,6 +75,7 @@ if submitted:
         "AGE": age,
         "SEX": sex,
         "STATEFIP": statefip,
+        "REGION": region,
         "MARST": marital_status,
         "NCHILD": nchil,
         "UHRSWORK": uhrswork,
@@ -85,8 +89,10 @@ if submitted:
         "RACE": race,
         "BPL": bpl,
         "ANCESTR1": ancestr1,
+        "LANGUAGE": language,
         "OCCSOC": occsoc,  # Occupation code
         "IND": ind,        # Industry code
+        "PERWT": perwt,
         "WKSWORK1": wkswork1
     }
 
