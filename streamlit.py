@@ -6,6 +6,24 @@ import joblib
 # ✅ MUST come before any Streamlit command
 st.set_page_config(page_title="Income Prediction App", layout="wide")
 
+# Mapping of state names to FIPS codes (partial example — you can expand it)
+state_name_to_fips = {
+    "Alabama": 1, "Alaska": 2, "Arizona": 4, "Arkansas": 5,
+    "California": 6, "Colorado": 8, "Connecticut": 9, "Delaware": 10,
+    "District of Columbia": 11, "Florida": 12, "Georgia": 13,
+    "Hawaii": 15, "Idaho": 16, "Illinois": 17, "Indiana": 18,
+    "Iowa": 19, "Kansas": 20, "Kentucky": 21, "Louisiana": 22,
+    "Maine": 23, "Maryland": 24, "Massachusetts": 25, "Michigan": 26,
+    "Minnesota": 27, "Mississippi": 28, "Missouri": 29, "Montana": 30,
+    "Nebraska": 31, "Nevada": 32, "New Hampshire": 33, "New Jersey": 34,
+    "New Mexico": 35, "New York": 36, "North Carolina": 37,
+    "North Dakota": 38, "Ohio": 39, "Oklahoma": 40, "Oregon": 41,
+    "Pennsylvania": 42, "Rhode Island": 44, "South Carolina": 45,
+    "South Dakota": 46, "Tennessee": 47, "Texas": 48, "Utah": 49,
+    "Vermont": 50, "Virginia": 51, "Washington": 53,
+    "West Virginia": 54, "Wisconsin": 55, "Wyoming": 56
+}
+
 # Load components
 preprocessor = joblib.load("income_preprocessor.pkl")
 model = joblib.load("income_xgb_model.pkl")
@@ -32,7 +50,8 @@ with st.form("income_form"):
     with col1:
         age = st.number_input("Age", 0, 120, 30)
         sex = st.selectbox("Sex", [1, 2])
-        statefip = st.number_input("State FIPS", 1, 99, 6)
+        state_name = st.selectbox("State", list(state_name_to_fips.keys()))
+        statefip = state_name_to_fips[state_name]
         region = st.number_input("Region", 1, 9, 1)
         marital_status = st.number_input("Marital Status (MARST)", 1, 9, 1)
         nchil = st.number_input("Number of Children", 0, 20, 0)
