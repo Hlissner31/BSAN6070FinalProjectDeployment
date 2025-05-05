@@ -8,6 +8,16 @@ preprocessor = joblib.load("income_preprocessor.pkl")
 model = joblib.load("income_xgb_model.pkl")
 average_mae = joblib.load("average_mae.pkl")
 
+# Load Excel data for industry and occupation codes
+@st.cache
+def load_data():
+    file_path = 'Mapping.xlsx'  # Adjust this path to your actual file
+    industry_df = pd.read_excel(file_path, sheet_name='IND')
+    occupation_df = pd.read_excel(file_path, sheet_name='OCC')
+    return industry_df, occupation_df
+
+industry_df, occupation_df = load_data()
+
 st.set_page_config(page_title="Income Prediction App", layout="wide")
 st.title("Predicted Personal Income")
 
@@ -21,7 +31,6 @@ with st.form("income_form"):
         age = st.number_input("Age", 0, 120, 30)
         sex = st.selectbox("Sex", [1, 2])
         statefip = st.number_input("State FIPS", 1, 99, 6)
-        region = st.number_input("Region", 1, 9, 1)
         marital_status = st.number_input("Marital Status (MARST)", 1, 9, 1)
         nchil = st.number_input("Number of Children", 0, 20, 0)
         uhrswork = st.number_input("Hours Worked per Week", 0, 100, 40)
@@ -39,10 +48,18 @@ with st.form("income_form"):
         race = st.number_input("Race", 1, 9, 1)
         bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
         ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
-        language = st.number_input("Language", 0, 999, 100)
-        occsoc = st.text_input("Occupation Code (OCCSOC)", "15-1121")
-        ind = st.text_input("Industry Code (IND)", "7860")
-        perwt = st.number_input("Person Weight", 1, 999, 100)
+        
+        # Replace occsoc and ind with dropdowns based on the Excel file
+        industry_options = industry_df['Industry Name'].tolist()
+        occupation_options = occupation_df['Occupation Name'].tolist()
+
+        selected_industry = st.selectbox("Select an Industry", industry_options)
+        selected_occupation = st.selectbox("Select an Occupation", occupation_options)
+
+        # Get the corresponding codes based on user selection
+        ind = industry_df[industry_df['Industry Name'] == selected_industry]['Industry Code'].values[0]
+        occsoc = occupation_df[occupation_df['Occupation Name'] == selected_occupation]['Occupation Code'].values[0]
+
         wkswork1 = st.number_input("Weeks Worked Last Year", 1, 7, 6)
 
     submitted = st.form_submit_button("Predict Income")
@@ -53,7 +70,6 @@ if submitted:
         "AGE": age,
         "SEX": sex,
         "STATEFIP": statefip,
-        "REGION": region,
         "MARST": marital_status,
         "NCHILD": nchil,
         "UHRSWORK": uhrswork,
@@ -67,10 +83,8 @@ if submitted:
         "RACE": race,
         "BPL": bpl,
         "ANCESTR1": ancestr1,
-        "LANGUAGE": language,
-        "OCCSOC": occsoc,
-        "IND": ind,
-        "PERWT": perwt,
+        "OCCSOC": occsoc,  # Occupation code
+        "IND": ind,        # Industry code
         "WKSWORK1": wkswork1
     }
 
