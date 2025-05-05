@@ -21,7 +21,6 @@ def load_data():
 
 industry_df, occupation_df = load_data()
 
-st.set_page_config(page_title="Income Prediction App", layout="wide")
 st.title("Predicted Personal Income")
 
 # Define input form
