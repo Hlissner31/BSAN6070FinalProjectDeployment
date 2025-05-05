@@ -3,6 +3,9 @@ import pandas as pd
 import numpy as np
 import joblib
 
+# ✅ MUST come before any Streamlit command
+st.set_page_config(page_title="Income Prediction App", layout="wide")
+
 # Load components
 preprocessor = joblib.load("income_preprocessor.pkl")
 model = joblib.load("income_xgb_model.pkl")
