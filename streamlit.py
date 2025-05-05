@@ -22,7 +22,8 @@ state_name_to_fips = {
         "South Dakota": 46, "Tennessee": 47, "Texas": 48, "Utah": 49,
         "Vermont": 50, "Virginia": 51, "Washington": 53,
         "West Virginia": 54, "Wisconsin": 55, "Wyoming": 56
-    }
+}
+sex_map = {'Male': 0, 'Female': 1}
 REGION_map = {
         'East South Central Div.': 1,
         'Pacific Division': 2,
@@ -139,13 +140,15 @@ with st.form("income_form"):
 
     with col1:
         age = st.number_input("Age", 0, 120, 30)
-        sex = st.selectbox("Sex", [1, 2])
+        sex = st.selectbox("Sex", list(sex_map.keys()))
+        sexcode = sex_map[sex]
         state_name = st.selectbox("State", list(state_name_to_fips.keys()))
         statefip = state_name_to_fips[state_name]
         region = st.selectbox("Region", list(REGION_map.keys()))
         region_code = REGION_map[region]
-        marital_status = st.number_input("Marital Status (MARST)", 1, 9, 1)
-        nchil = st.number_input("Number of Children", 0, 20, 0)
+        marital_status = st.selectbox("Marital Status (MARST)", list(MARST_map.keys()))
+        marital_status_code = MARST_map[marital_status]
+        nchil = st.number_input("Number of Children", 0, 9, 0)
         uhrswork = st.number_input("Hours Worked per Week", 0, 100, 40)
 
     with col2:
