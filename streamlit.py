@@ -131,6 +131,7 @@ educ_to_label = {
     'Grade 12': 4, 'Grade 11': 5, 'Grade 10': 6, 'Grade 9': 7,
     'Grade 5, 6, 7, or 8': 8, 'Nursery school to grade 4': 9, 'N/A or no schooling': 10
 }
+classwkr_map = {'Works for wages':0, 'Self-employed':1}
 
 
 
@@ -171,7 +172,8 @@ with st.form("income_form"):
         uhrswork = st.number_input("Hours Worked per Week", 0, 100, 40)
 
     with col2:
-        classwkr = st.number_input("Class of Worker (CLASSWKR)", 0, 99, 27)
+        classwkr = st.selectbox("Class of Worker (CLASSWKR)", list(classwkr_map.keys()))
+        classwkr_code = classwkr_map[classwkr]  # Ensure mapping happens here
         trantime = st.number_input("Transit Time (minutes)", 0, 999, 30)
         transwork = st.selectbox("Mode of Transport to Work (TRANWORK)", list(TRANWORK_map.keys()))
         transwork_code = TRANWORK_map[transwork]  # Ensure mapping happens here
@@ -220,7 +222,7 @@ if submitted:
         "MARST": marital_status_code,
         "NCHILD": nchil,
         "UHRSWORK": uhrswork,
-        "CLASSWKR": classwkr,
+        "CLASSWKR": classwkr_code,
         "TRANTIME": trantime,
         "TRANWORK": transwork_code,
         "DEGFIELD_ENCODED": degfield_code,
