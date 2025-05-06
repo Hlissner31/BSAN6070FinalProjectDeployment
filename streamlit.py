@@ -44,10 +44,6 @@ MARST_map = {
         'Married': 6,
         'spouse absent': 7
     }
-MARRNO_map = {
-        'No': 0,
-        'Yes': 1
-    }
 RACE_map = {
         'Black/African American': 1, 
         'White': 2, 
@@ -161,7 +157,8 @@ with st.form("income_form"):
         educ = st.number_input("Education Level (Encoded)", 0, 100, 70)
 
     with col3:
-        race = st.number_input("Race", 1, 9, 1)
+        race = st.number_input("Race", list(RACE_map.keys()))
+        race_code = RACE_map[race]
         bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
         ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
         language = st.number_input("Language", 0, 999, 100)
@@ -186,9 +183,9 @@ with st.form("income_form"):
 if submitted:
     input_dict = {
         "AGE": age,
-        "SEX": sex,
+        "SEX": sexcode,
         "STATEFIP": statefip,
-        "REGION": region,
+        "REGION": region_code,
         "MARST": marital_status,
         "NCHILD": nchil,
         "UHRSWORK": uhrswork,
@@ -199,7 +196,7 @@ if submitted:
         "DEGFIELD2_ENCODED": degfield2,
         "SPEAKENG_ENCODED": speakeng,
         "EDUC_ENCODED": educ,
-        "RACE": race,
+        "RACE": race_code,
         "BPL": bpl,
         "ANCESTR1": ancestr1,
         "LANGUAGE": language,
