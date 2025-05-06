@@ -120,7 +120,7 @@ degree_to_manual_label = {
     'Criminal Justice and Fire Protection': 27, 'Engineering Technologies': 28, 'Construction Services': 29,
     'Transportation Sciences and Technologies': 30, 'Electrical and Mechanic Repairs and Technologies': 31,
     'Nuclear, Industrial Radiology, and Biological Technologies': 32, 'Communication Technologies': 33,
-    'Cosmetology Services and Culinary Arts': 34, 'Military Technologies': 35
+    'Cosmetology Services and Culinary Arts': 34, 'Military Technologies': 35, 'NAN': -1
 }
 speakeng_to_label = {
     'Yes, speaks only English': 0, 'Yes, speaks very well': 1, 'Yes, speaks well': 2,
@@ -269,7 +269,7 @@ if submitted:
     rounded_predicted_income = round(predicted_income / 1000) * 1000
     rounded_opposite_predicted_income = round(opposite_predicted_income / 1000) * 1000
 
-    # Set fixed range to $20,000
+    # Set fixed range to $20,000 - Error is $20,360 so this just simplifies it
     fixed_range = 20000
 
     # Calculate income range with fixed value
