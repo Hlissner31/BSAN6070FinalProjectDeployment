@@ -109,6 +109,29 @@ TRANWORK_map = {
     'Auto, truck, or van': 1, 'Walked only': 2, 'Worked at home': 3, 'Bus': 4, 'Bicycle': 5, 'Other': 6, 'Motorcycle': 7, 'Taxicab': 8, 'Ferryboat': 9,
     'Light rail, streetcar, or trolley (Carro público in PR)': 10, 'Subway or elevated': 11, 'Long-distance train or commuter train': 12
     }
+degree_to_manual_label = {
+    'Engineering': 0, 'Computer and Information Sciences': 1, 'Mathematics and Statistics': 2, 'Business': 3, 'Law': 4, 'Architecture': 5,
+    'Physical Sciences': 6, 'Medical and Health Sciences and Services': 7, 'Biology and Life Sciences': 8, 'Environment and Natural Resources': 9,
+    'Social Sciences': 10, 'Public Affairs, Policy, and Social Work': 11, 'Psychology': 12, 'Education Administration and Teaching': 13,
+    'Communications': 14, 'Linguistics and Foreign Languages': 15, 'English Language, Literature, and Composition': 16, 'History': 17,
+    'Area, Ethnic, and Civilization Studies': 18, 'Interdisciplinary and Multi-Disciplinary Studies (General)': 19, 'Fine Arts': 20,
+    'Physical Fitness, Parks, Recreation, and Leisure': 21, 'Family and Consumer Sciences': 22, 'Agriculture': 23,
+    'Philosophy and Religious Studies': 24, 'Theology and Religious Vocations': 25, 'Library Science': 26,
+    'Criminal Justice and Fire Protection': 27, 'Engineering Technologies': 28, 'Construction Services': 29,
+    'Transportation Sciences and Technologies': 30, 'Electrical and Mechanic Repairs and Technologies': 31,
+    'Nuclear, Industrial Radiology, and Biological Technologies': 32, 'Communication Technologies': 33,
+    'Cosmetology Services and Culinary Arts': 34, 'Military Technologies': 35
+}
+speakeng_to_label = {
+    'Yes, speaks only English': 0, 'Yes, speaks very well': 1, 'Yes, speaks well': 2,
+    'Yes, but not well': 3, 'Does not speak English': 4
+}
+educ_to_label = {
+    '5+ years of college': 0, '4 years of college': 1, '2 years of college': 2, '1 year of college': 3,
+    'Grade 12': 4, 'Grade 11': 5, 'Grade 10': 6, 'Grade 9': 7,
+    'Grade 5, 6, 7, or 8': 8, 'Nursery school to grade 4': 9, 'N/A or no schooling': 10
+}
+
 
 
 # Load components
@@ -152,10 +175,14 @@ with st.form("income_form"):
         trantime = st.number_input("Transit Time (minutes)", 0, 999, 30)
         transwork = st.selectbox("Mode of Transport to Work (TRANWORK)", list(TRANWORK_map.keys()))
         transwork_code = TRANWORK_map[transwork]  # Ensure mapping happens here
-        degfield = st.number_input("Degree Field 1 (Encoded)", 0, 999, 231)
-        degfield2 = st.number_input("Degree Field 2 (Encoded)", 0, 999, 0)
-        speakeng = st.number_input("English Proficiency (Encoded)", 0, 5, 4)
-        educ = st.number_input("Education Level (Encoded)", 0, 100, 70)
+        degfield = st.selectbox("Degree Field 1 (Encoded)", list(degree_to_manual_label.keys()))
+        degfield_code = degree_to_manual_label[degfield]  # Apply degree field mapping here
+        degfield2 = st.selectbox("Degree Field 2 (Encoded)", list(degree_to_manual_label.keys()))
+        degfield2_code = degree_to_manual_label[degfield2]
+        speakeng = st.selectbox("English Proficiency (Encoded)", list(speakeng_to_label.keys()))
+        speakeng_code = speakeng_to_label[speakeng]  # Apply English proficiency mapping here
+        educ = st.number_input("Education Level (Encoded)", list(educ_to_label.keys()))
+        educ_code = educ_to_label[educ]
 
     with col3:
         race = st.selectbox("Race", list(RACE_map.keys()))
@@ -196,10 +223,10 @@ if submitted:
         "CLASSWKR": classwkr,
         "TRANTIME": trantime,
         "TRANWORK": transwork_code,
-        "DEGFIELD_ENCODED": degfield,
-        "DEGFIELD2_ENCODED": degfield2,
-        "SPEAKENG_ENCODED": speakeng,
-        "EDUC_ENCODED": educ,
+        "DEGFIELD_ENCODED": degfield_code,
+        "DEGFIELD2_ENCODED": degfield2_code,
+        "SPEAKENG_ENCODED": speakeng_code,
+        "EDUC_ENCODED": educ_code,
         "RACE": race_code,
         "BPL": bpl_code,
         "ANCESTR1": ancestr1_code,
