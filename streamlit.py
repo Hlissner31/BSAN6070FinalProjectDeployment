@@ -269,27 +269,30 @@ if submitted:
     rounded_predicted_income = round(predicted_income / 1000) * 1000
     rounded_opposite_predicted_income = round(opposite_predicted_income / 1000) * 1000
 
-    # Calculate ranges (rounded)
-    rounded_selected_lower = rounded_predicted_income - average_mae
-    rounded_selected_upper = rounded_predicted_income + average_mae
+    # Set fixed range to $20,000
+    fixed_range = 20000
 
-    rounded_opposite_lower = rounded_opposite_predicted_income - average_mae
-    rounded_opposite_upper = rounded_opposite_predicted_income + average_mae
+    # Calculate income range with fixed value
+    rounded_selected_lower = rounded_predicted_income - fixed_range
+    rounded_selected_upper = rounded_predicted_income + fixed_range
 
-    # Display results with rounded values
+    rounded_opposite_lower = rounded_opposite_predicted_income - fixed_range
+    rounded_opposite_upper = rounded_opposite_predicted_income + fixed_range
+
+    # Display results with fixed range
     st.subheader("Predicted Income Comparison by Sex")
 
     # Selected sex
     st.markdown(f"""
     **Selected Sex ({sex}):**  
     - Predicted Income: **${rounded_predicted_income:,.0f}**  
-    - Range: ${rounded_selected_lower:,.0f} – ${rounded_selected_upper:,.0f} (±${average_mae:,.0f})
+    - Range: ${rounded_selected_lower:,.0f} – ${rounded_selected_upper:,.0f} (±${fixed_range:,.0f})
     """)
 
     # Opposite sex
     st.markdown(f"""
     **Opposite Sex ({opposite_sex_label}):**  
     - Predicted Income: **${rounded_opposite_predicted_income:,.0f}**  
-    - Range: ${rounded_opposite_lower:,.0f} – ${rounded_opposite_upper:,.0f} (±${average_mae:,.0f})
+    - Range: ${rounded_opposite_lower:,.0f} – ${rounded_opposite_upper:,.0f} (±${fixed_range:,.0f})
     """)
 
