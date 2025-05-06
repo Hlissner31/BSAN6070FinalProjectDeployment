@@ -23,7 +23,7 @@ state_name_to_fips = {
         "Vermont": 50, "Virginia": 51, "Washington": 53,
         "West Virginia": 54, "Wisconsin": 55, "Wyoming": 56
 }
-sex_map = {'Male': 0, 'Female': 1}
+sex_map = {'Male': 1, 'Female': 0}
 REGION_map = {
         'East South Central Div.': 1,
         'Pacific Division': 2,
@@ -265,10 +265,27 @@ if submitted:
     st.write(f"**Opposite Sex ({opposite_sex_label}):** ${opposite_predicted_income:,.2f}")
 
 
-    # Show prediction range
-    lower = predicted_income - average_mae
-    upper = predicted_income + average_mae
+    # Calculate ranges
+    selected_lower = predicted_income - average_mae
+    selected_upper = predicted_income + average_mae
 
-    st.subheader("Estimated Annual Income")
-    st.success(f"${predicted_income:,.0f} (±${average_mae:,.0f})")
-    st.write(f"**Range:** ${lower:,.0f} - ${upper:,.0f}")
+    opposite_lower = opposite_predicted_income - average_mae
+    opposite_upper = opposite_predicted_income + average_mae
+
+    # Display results
+    st.subheader("Predicted Income Comparison by Sex")
+
+    # Selected sex
+    st.markdown(f"""
+    **Selected Sex ({sex}):**  
+    - Predicted Income: **${predicted_income:,.0f}**  
+    - Range: ${selected_lower:,.0f} – ${selected_upper:,.0f} (±${average_mae:,.0f})
+    """)
+
+    # Opposite sex
+    st.markdown(f"""
+    **Opposite Sex ({opposite_sex_label}):**  
+    - Predicted Income: **${opposite_predicted_income:,.0f}**  
+    - Range: ${opposite_lower:,.0f} – ${opposite_upper:,.0f} (±${average_mae:,.0f})
+    """)
+
