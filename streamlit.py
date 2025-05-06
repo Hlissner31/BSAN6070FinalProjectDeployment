@@ -253,9 +253,11 @@ if submitted:
     # Create new input for opposite sex
     opposite_input_data = input_dict.copy()
     opposite_input_data['SEX'] = opposite_sex_encoded
+    opposite_input_df = pd.DataFrame([opposite_input_data])
 
-    # Run prediction for opposite sex
-    opposite_predicted_income = model.predict(opposite_input_data)[0]
+    # Preprocess and predict for opposite sex
+    opposite_input_transformed = preprocessor.transform(opposite_input_df)
+    opposite_predicted_income = model.predict(opposite_input_transformed)[0]
 
     # Display results
     st.subheader("Predicted Income Comparison:")
