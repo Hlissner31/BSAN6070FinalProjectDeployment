@@ -157,7 +157,7 @@ with st.form("income_form"):
         educ = st.number_input("Education Level (Encoded)", 0, 100, 70)
 
     with col3:
-        race = st.number_input("Race", list(RACE_map.keys()))
+        race = st.selectbox("Race", list(RACE_map.keys()))
         race_code = RACE_map[race]
         bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
         ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
