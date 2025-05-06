@@ -137,13 +137,13 @@ with st.form("income_form"):
     with col1:
         age = st.number_input("Age", 0, 120, 30)
         sex = st.selectbox("Sex", list(sex_map.keys()))
-        sexcode = sex_map[sex]
+        sexcode = sex_map[sex]  # Ensure mapping happens here
         state_name = st.selectbox("State", list(state_name_to_fips.keys()))
-        statefip = state_name_to_fips[state_name]
+        statefip = state_name_to_fips[state_name]  # Apply state mapping here
         region = st.selectbox("Region", list(REGION_map.keys()))
-        region_code = REGION_map[region]
+        region_code = REGION_map[region]  # Apply region mapping here
         marital_status = st.selectbox("Marital Status (MARST)", list(MARST_map.keys()))
-        marital_status_code = MARST_map[marital_status]
+        marital_status_code = MARST_map[marital_status]  # Apply marital status mapping here
         nchil = st.number_input("Number of Children", 0, 9, 0)
         uhrswork = st.number_input("Hours Worked per Week", 0, 100, 40)
 
@@ -154,53 +154,68 @@ with st.form("income_form"):
         degfield = st.number_input("Degree Field 1 (Encoded)", 0, 999, 231)
         degfield2 = st.number_input("Degree Field 2 (Encoded)", 0, 999, 0)
         speakeng = st.number_input("English Proficiency (Encoded)", 0, 5, 4)
-        educ = st.number_input("Education Level (Encoded)", 0, 99, 12)
-        race = st.selectbox("Race (RACE)", list(RACE_map.keys()))
-        race_code = RACE_map[race]
-        bpl = st.selectbox("Country of Birth (BPL)", list(BPL_map.keys()))
-        bpl_code = BPL_map[bpl]
-        ancestry = st.selectbox("Ancestry (ANCESTR1)", list(ANCESTR1_map.keys()))
-        ancestry_code = ANCESTR1_map[ancestry]
-        language = st.selectbox("Language Spoken (LANGUAGE)", list(LANGUAGE_map.keys()))
-        language_code = LANGUAGE_map[language]
+        educ = st.number_input("Education Level (Encoded)", 0, 100, 70)
 
     with col3:
-        occupation = st.selectbox("Occupation (OCCSOC)", occupation_df['Occupation'].tolist())
-        industry = st.selectbox("Industry (IND)", industry_df['Industry'].tolist())
+        race = st.number_input("Race", 1, 999, 100)#list(RACE_map.keys()))
+        #race_code = RACE_map[race]
+        bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
+        ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
+        language = st.number_input("Language", 0, 999, 100)
+        perwt = st.number_input("Person Weight", 1, 999, 100)
+        
+        # Replace occsoc and ind with dropdowns based on the Excel file
+        industry_options = industry_df['Industry Name'].tolist()
+        occupation_options = occupation_df['Occupation Name'].tolist()
 
-    # Submit button
-    submitted = st.form_submit_button("Predict")
+        selected_industry = st.selectbox("Select an Industry", industry_options)
+        selected_occupation = st.selectbox("Select an Occupation", occupation_options)
 
-    if submitted:
-        # Prepare input data for prediction
-        input_data = pd.DataFrame({
-            'AGE': [age],
-            'SEX': [sexcode],
-            'STATEFIP': [statefip],
-            'REGION': [region_code],
-            'MARST': [marital_status_code],
-            'NCHILD': [nchil],
-            'UHRSWORK': [uhrswork],
-            'CLASSWKR': [classwkr],
-            'TRANTIME': [trantime],
-            'TRANWORK': [transwork],
-            'DEGFIELD_ENCODED': [degfield],
-            'DEGFIELD2_ENCODED': [degfield2],
-            'SPEAKENG_ENCODED': [speakeng],
-            'EDUC_ENCODED': [educ],
-            'RACE': [race_code],
-            'BPL': [bpl_code],
-            'ANCESTR1': [ancestry_code],
-            'LANGUAGE': [language_code],
-            'OCCSOC': [occupation_df.loc[occupation_df['Occupation'] == occupation, 'Code'].values[0]],
-            'IND': [industry_df.loc[industry_df['Industry'] == industry, 'Code'].values[0]]
-        })
+        # Get the corresponding codes based on user selection
+        ind = industry_df[industry_df['Industry Name'] == selected_industry]['Industry Code'].values[0]
+        occsoc = occupation_df[occupation_df['Occupation Name'] == selected_occupation]['Occupation Code'].values[0]
 
-        # Preprocess the input data and make prediction
-        preprocessed_data = preprocessor.transform(input_data)
-        prediction = model.predict(preprocessed_data)
-        prediction_range = (prediction - average_mae, prediction + average_mae)
+        wkswork1 = st.number_input("Weeks Worked Last Year", 1, 7, 6)
 
-        # Display the result
-        st.write(f"### Predicted Income: ${prediction[0]:,.2f}")
-        st.write(f"### Predicted Income Range: ${prediction_range[0][0]:,.2f} - ${prediction_range[1][0]:,.2f}")
+    submitted = st.form_submit_button("Predict Income")
+
+# Predict
+if submitted:
+    input_dict = {
+        "AGE": age,
+        "SEX": sexcode,
+        "STATEFIP": statefip,
+        "REGION": region_code,
+        "MARST": marital_status,
+        "NCHILD": nchil,
+        "UHRSWORK": uhrswork,
+        "CLASSWKR": classwkr,
+        "TRANTIME": trantime,
+        "TRANWORK": transwork,
+        "DEGFIELD_ENCODED": degfield,
+        "DEGFIELD2_ENCODED": degfield2,
+        "SPEAKENG_ENCODED": speakeng,
+        "EDUC_ENCODED": educ,
+        "RACE": race,
+        "BPL": bpl,
+        "ANCESTR1": ancestr1,
+        "LANGUAGE": language,
+        "OCCSOC": occsoc,  # Occupation code
+        "IND": ind,        # Industry code
+        "PERWT": perwt,
+        "WKSWORK1": wkswork1
+    }
+
+    input_df = pd.DataFrame([input_dict])
+
+    # Preprocess and predict
+    input_transformed = preprocessor.transform(input_df)
+    predicted_income = model.predict(input_transformed)[0]
+
+    # Show prediction range
+    lower = predicted_income - average_mae
+    upper = predicted_income + average_mae
+
+    st.subheader("Estimated Annual Income")
+    st.success(f"${predicted_income:,.0f} (±${average_mae:,.0f})")
+    st.write(f"**Range:** ${lower:,.0f} - ${upper:,.0f}")
