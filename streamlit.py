@@ -245,6 +245,24 @@ if submitted:
     input_transformed = preprocessor.transform(input_df)
     predicted_income = model.predict(input_transformed)[0]
 
+
+    # Flip SEX
+    opposite_sex_encoded = 1 if sexcode == 0 else 0
+    opposite_sex_label = [k for k, v in sex_map.items() if v == opposite_sex_encoded][0]
+
+    # Create new input for opposite sex
+    opposite_input_data = input_dict.copy()
+    opposite_input_data['SEX'] = opposite_sex_encoded
+
+    # Run prediction for opposite sex
+    opposite_predicted_income = model.predict(opposite_input_data)[0]
+
+    # Display results
+    st.subheader("Predicted Income Comparison:")
+    st.write(f"**Selected Sex ({sex}):** ${predicted_income:,.2f}")
+    st.write(f"**Opposite Sex ({opposite_sex_label}):** ${opposite_predicted_income:,.2f}")
+
+
     # Show prediction range
     lower = predicted_income - average_mae
     upper = predicted_income + average_mae
