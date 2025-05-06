@@ -56,7 +56,7 @@ RACE_map = {
         'Japanese': 9
     }
 BPL_map = {
-        'Georgia': 1, 'Alabama': 2, 'Florida': 3, 'Missouri': 4, 'Mexico': 5, 'New York': 6, 'California': 7, 'New Jersey': 8, 'North Carolina': 9, 'Nevada': 10,
+    'Georgia': 1, 'Alabama': 2, 'Florida': 3, 'Missouri': 4, 'Mexico': 5, 'New York': 6, 'California': 7, 'New Jersey': 8, 'North Carolina': 9, 'Nevada': 10,
     'India': 11, 'Michigan': 12, 'Maryland': 13, 'Pennsylvania': 14, 'Germany': 15, 'Indiana': 16, 'Illinois': 17, 'Colorado': 18, 'Tennessee': 19, 'Mississippi': 20,
     'Cuba': 21, 'Kentucky': 22, 'China': 23, 'West Indies': 24, 'Texas': 25, 'Central America': 26, 'New Hampshire': 27, 'SOUTH AMERICA': 28, 'Ohio': 29, 'Wisconsin': 30,
     'Oklahoma': 31, 'Washington': 32, 'Belgium': 33, 'Nebraska': 34, 'Maine': 35, 'Other USSR/Russia': 36, 'Iraq': 37, 'Massachusetts': 38, 'Virginia': 39, 'Alaska': 40,
@@ -150,7 +150,8 @@ with st.form("income_form"):
     with col2:
         classwkr = st.number_input("Class of Worker (CLASSWKR)", 0, 99, 27)
         trantime = st.number_input("Transit Time (minutes)", 0, 999, 30)
-        transwork = st.number_input("Mode of Transport to Work (TRANWORK)", 0, 99, 10)
+        transwork = st.selectbox("Mode of Transport to Work (TRANWORK)", list(TRANWORK_map.keys()))
+        transwork_code = TRANWORK_map[transwork]  # Ensure mapping happens here
         degfield = st.number_input("Degree Field 1 (Encoded)", 0, 999, 231)
         degfield2 = st.number_input("Degree Field 2 (Encoded)", 0, 999, 0)
         speakeng = st.number_input("English Proficiency (Encoded)", 0, 5, 4)
@@ -159,9 +160,12 @@ with st.form("income_form"):
     with col3:
         race = st.selectbox("Race", list(RACE_map.keys()))
         race_code = RACE_map[race]
-        bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
-        ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
-        language = st.number_input("Language", 0, 999, 100)
+        bpl = st.selectbox("Birthplace Code (BPL)", list(BPL_map.keys())) 
+        bpl_code = BPL_map[bpl]  # Apply birthplace mapping here
+        ancestr1 = st.selectbox("Ancestry Code", list(ANCESTR1_map.keys()))
+        ancestr1_code = ANCESTR1_map[ancestr1]  # Apply ancestry mapping here
+        language = st.selectbox("Language", list(LANGUAGE_map.keys()))
+        language_code = LANGUAGE_map[language]  # Apply language mapping here
         perwt = st.number_input("Person Weight", 1, 999, 100)
         
         # Replace occsoc and ind with dropdowns based on the Excel file
@@ -191,15 +195,15 @@ if submitted:
         "UHRSWORK": uhrswork,
         "CLASSWKR": classwkr,
         "TRANTIME": trantime,
-        "TRANWORK": transwork,
+        "TRANWORK": transwork_code,
         "DEGFIELD_ENCODED": degfield,
         "DEGFIELD2_ENCODED": degfield2,
         "SPEAKENG_ENCODED": speakeng,
         "EDUC_ENCODED": educ,
         "RACE": race_code,
-        "BPL": bpl,
-        "ANCESTR1": ancestr1,
-        "LANGUAGE": language,
+        "BPL": bpl_code,
+        "ANCESTR1": ancestr1_code,
+        "LANGUAGE": language_code,
         "OCCSOC": occsoc,  # Occupation code
         "IND": ind,        # Industry code
         "PERWT": perwt,
