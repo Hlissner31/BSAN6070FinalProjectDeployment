@@ -181,7 +181,7 @@ with st.form("income_form"):
         degfield2_code = degree_to_manual_label[degfield2]
         speakeng = st.selectbox("English Proficiency (Encoded)", list(speakeng_to_label.keys()))
         speakeng_code = speakeng_to_label[speakeng]  # Apply English proficiency mapping here
-        educ = st.number_input("Education Level (Encoded)", list(educ_to_label.keys()))
+        educ = st.selectbox("Education Level (Encoded)", list(educ_to_label.keys()))
         educ_code = educ_to_label[educ]
 
     with col3:
