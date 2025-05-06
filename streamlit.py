@@ -208,7 +208,7 @@ with st.form("income_form"):
         ind = industry_df[industry_df['Industry Name'] == selected_industry]['Industry Code'].values[0]
         occsoc = occupation_df[occupation_df['Occupation Name'] == selected_occupation]['Occupation Code'].values[0]
 
-        wkswork1 = st.number_input("Weeks Worked Last Year", 1, 7, 6)
+        wkswork1 = st.number_input("Weeks Worked Last Year", 1, 52, 6)
 
     submitted = st.form_submit_button("Predict Income")
 
