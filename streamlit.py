@@ -157,8 +157,8 @@ with st.form("income_form"):
         educ = st.number_input("Education Level (Encoded)", 0, 100, 70)
 
     with col3:
-        race = st.number_input("Race", 1, 999, 100)#list(RACE_map.keys()))
-        #race_code = RACE_map[race]
+        race = st.number_input("Race", list(RACE_map.keys()))
+        race_code = RACE_map[race]
         bpl = st.number_input("Birthplace Code (BPL)", 1, 999, 100)
         ancestr1 = st.number_input("Ancestry Code", 0, 999, 100)
         language = st.number_input("Language", 0, 999, 100)
@@ -196,7 +196,7 @@ if submitted:
         "DEGFIELD2_ENCODED": degfield2,
         "SPEAKENG_ENCODED": speakeng,
         "EDUC_ENCODED": educ,
-        "RACE": race,
+        "RACE": race_code,
         "BPL": bpl,
         "ANCESTR1": ancestr1,
         "LANGUAGE": language,
