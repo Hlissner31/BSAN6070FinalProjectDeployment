@@ -186,7 +186,7 @@ if submitted:
         "SEX": sexcode,
         "STATEFIP": statefip,
         "REGION": region_code,
-        "MARST": marital_status,
+        "MARST": marital_status_code,
         "NCHILD": nchil,
         "UHRSWORK": uhrswork,
         "CLASSWKR": classwkr,
