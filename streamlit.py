@@ -265,27 +265,31 @@ if submitted:
     st.write(f"**Opposite Sex ({opposite_sex_label}):** ${opposite_predicted_income:,.2f}")
 
 
-    # Calculate ranges
-    selected_lower = predicted_income - average_mae
-    selected_upper = predicted_income + average_mae
+    # Round predictions to nearest 1000
+    rounded_predicted_income = round(predicted_income / 1000) * 1000
+    rounded_opposite_predicted_income = round(opposite_predicted_income / 1000) * 1000
 
-    opposite_lower = opposite_predicted_income - average_mae
-    opposite_upper = opposite_predicted_income + average_mae
+    # Calculate ranges (rounded)
+    rounded_selected_lower = rounded_predicted_income - average_mae
+    rounded_selected_upper = rounded_predicted_income + average_mae
 
-    # Display results
+    rounded_opposite_lower = rounded_opposite_predicted_income - average_mae
+    rounded_opposite_upper = rounded_opposite_predicted_income + average_mae
+
+    # Display results with rounded values
     st.subheader("Predicted Income Comparison by Sex")
 
     # Selected sex
     st.markdown(f"""
     **Selected Sex ({sex}):**  
-    - Predicted Income: **${predicted_income:,.0f}**  
-    - Range: ${selected_lower:,.0f} – ${selected_upper:,.0f} (±${average_mae:,.0f})
+    - Predicted Income: **${rounded_predicted_income:,.0f}**  
+    - Range: ${rounded_selected_lower:,.0f} – ${rounded_selected_upper:,.0f} (±${average_mae:,.0f})
     """)
 
     # Opposite sex
     st.markdown(f"""
     **Opposite Sex ({opposite_sex_label}):**  
-    - Predicted Income: **${opposite_predicted_income:,.0f}**  
-    - Range: ${opposite_lower:,.0f} – ${opposite_upper:,.0f} (±${average_mae:,.0f})
+    - Predicted Income: **${rounded_opposite_predicted_income:,.0f}**  
+    - Range: ${rounded_opposite_lower:,.0f} – ${rounded_opposite_upper:,.0f} (±${average_mae:,.0f})
     """)
 
